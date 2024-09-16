@@ -60,24 +60,6 @@ services:
       - PUBLIC_PROTOCOL
       - DEFAULT_USER
       - DEFAULT_PASSWORD
-  cartodb-resque:
-    image: sabman/ihmeuw-cartodb-docker_cartodb-editor
-    depends_on:
-      - cartodb-postgis
-      - cartodb-redis
-      - cartodb-mapsapi
-      - cartodb-sqlapi
-    container_name: cartodb-resque
-    environment:
-      - START_RESQUE_ONLY=1
-      - PUBLIC_HOST
-      - PUBLIC_PORT
-      - PUBLIC_PROTOCOL
-      - DEFAULT_USER
-      - DEFAULT_PASSWORD
-      - ENVIRONMENT
-    volumes_from:
-      - cartodb-editor
   cartodb-router:
     depends_on:
       - cartodb-mapsapi
@@ -88,7 +70,7 @@ services:
       context: router
     volumes:
       - public:/public:ro
-      - letsencrypt:/etc/letsencrypt
+      #- letsencrypt:/etc/letsencrypt
     ports:
       - 80:80
       - 443:443

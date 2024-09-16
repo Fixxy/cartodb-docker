@@ -17,11 +17,6 @@ DEFAULT_USER=$DEFAULT_USER \
   PUBLIC_PROTOCOL=$PUBLIC_PROTOCOL \
   node docker-entrypoint-util/configure $@
 
-if [[ "x$START_RESQUE_ONLY" != "x" ]]; then
-  echo "Starting Resque..."
-  exec bundle exec ./script/resque
-fi
-
 echo "Initializing the metadata database..."
 bundle exec rake db:create
 bundle exec rake db:migrate
