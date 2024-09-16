@@ -8,21 +8,18 @@ volumes:
 
 services:
   cartodb-postgis:
-    #image: sabman/ihmeuw-cartodb-docker_cartodb-postgis
     container_name: cartodb-postgis
     build:
       context: postgis
     volumes:
       - postgresdb:/var/lib/postgresql/data
   cartodb-redis:
-    #image: sabman/ihmeuw-cartodb-docker_cartodb-redis
     container_name: cartodb-redis
     build:
       context: redis
     volumes:
       - redisdb:/data
   cartodb-sqlapi:
-    #image: sabman/ihmeuw-cartodb-docker_cartodb-sqlapi
     depends_on:
       - cartodb-postgis
       - cartodb-redis
@@ -33,7 +30,6 @@ services:
     environment:
       - ENVIRONMENT
   cartodb-mapsapi:
-    #image: sabman/ihmeuw-cartodb-docker_cartodb-mapsapi
     depends_on:
       - cartodb-postgis
       - cartodb-redis
@@ -85,7 +81,6 @@ services:
     volumes_from:
       - cartodb-editor
   cartodb-router:
-    #image: sabman/ihmeuw-cartodb-docker_cartodb-router
     depends_on:
       - cartodb-mapsapi
       - cartodb-sqlapi
