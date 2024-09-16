@@ -78,7 +78,7 @@ RUN apt-get update \
     unzip \
     wget \
   # Install Pip.
-  && wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py \
+  && wget -O /tmp/get-pip.py https://bootstrap.pypa.io/pip/2.7/get-pip.py \
   && python /tmp/get-pip.py \
   # Clean up.
   && rm /tmp/get-pip.py \
