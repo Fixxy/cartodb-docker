@@ -1,13 +1,13 @@
 FROM buildpack-deps:16.04
 
-RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
   && apt-get update \
   && apt-get -y --no-install-recommends install \
     nodejs \
   && rm -rf /var/lib/apt/lists/*
 
 # CartoDB/CartoDB-SQL-API version
-ENV CARTODB_SQL_API_VERSION=2.2.1
+ENV CARTODB_SQL_API_VERSION=6.0.0
 
 RUN mkdir /CartoDB-SQL-API \
   && curl -L https://github.com/CartoDB/CartoDB-SQL-API/archive/${CARTODB_SQL_API_VERSION}.tar.gz \
