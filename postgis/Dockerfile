@@ -31,11 +31,14 @@ RUN apt-get -y --no-install-recommends install \
     # PostGIS
     libxml2-dev \
     postgis \
+    postgresql-postgis \
     # dataservices deps
     ruby
 
 # https://github.com/CartoDB/cartodb-postgresql version
 ENV CARTODB_POSTGRESQL_VERSION=0.24.0
+# https://github.com/CartoDB/crankshaft version
+ENV CRANKSHAFT_VERSION=0.8.1
 # https://github.com/CartoDB/data-services
 ENV DATASERVICES_VERSION=0.0.2
 # https://github.com/CartoDB/dataservices-api
@@ -67,6 +70,7 @@ RUN git clone \
 
 # Install Crankshaft extensions
 RUN git clone \
+    --branch ${CRANKSHAFT_VERSION} \
     --depth 1 https://github.com/CartoDB/crankshaft.git \
   && cd /crankshaft \
   && make install
