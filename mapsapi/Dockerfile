@@ -1,6 +1,6 @@
 FROM buildpack-deps:16.04
 
-RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
   && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
   && echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
   && apt-get update \
@@ -15,14 +15,19 @@ RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - \
     yarn=0.27.5-1 \
   && rm -rf /var/lib/apt/lists/*
 
-# CartoDB/Windshaft-cartodb version
-ENV WINDSHAFT_CARTODB_VERSION=6.4.0
+# Installing zlib 1.2.9
+RUN wget https://github.com/madler/zlib/archive/v1.2.9.tar.gz \
+  && tar -zxvf v1.2.9.tar.gz \
+  && cd zlib-1.2.9 \
+  && ./configure --prefix=/bin/zlib/ \
+  && make && make install
+
+ENV LD_LIBRARY_PATH="/bin/zlib/lib"
 
 # Install the application.
-RUN mkdir /Windshaft-cartodb \
-  && curl -L https://github.com/CartoDB/Windshaft-cartodb/archive/${WINDSHAFT_CARTODB_VERSION}.tar.gz \
-    | tar -zx --strip-components=1 -C Windshaft-cartodb \
+RUN git clone https://github.com/Global-Mapping-Hub/Windshaft-cartodb.git \
   && cd /Windshaft-cartodb \
+  && chmod +x scripts/*.sh \
   && yarn \
   && mkdir /Windshaft-cartodb/logs
 
