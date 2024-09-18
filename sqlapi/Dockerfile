@@ -4,14 +4,11 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
   && apt-get update \
   && apt-get -y --no-install-recommends install \
     nodejs \
+    git \
   && rm -rf /var/lib/apt/lists/*
 
 # CartoDB/CartoDB-SQL-API version
-ENV CARTODB_SQL_API_VERSION=6.0.0
-
-RUN mkdir /CartoDB-SQL-API \
-  && curl -L https://github.com/CartoDB/CartoDB-SQL-API/archive/${CARTODB_SQL_API_VERSION}.tar.gz \
-    | tar -zx --strip-components=1 -C CartoDB-SQL-API \
+RUN git clone --depth 1 https://github.com/Global-Mapping-Hub/CartoDB-SQL-API.git \
   && cd /CartoDB-SQL-API \
   && npm install
 
