@@ -9,9 +9,9 @@ RUN apt-get update \
     software-properties-common python-software-properties \
   # Add PPAs.
   && add-apt-repository ppa:cartodb/gis \
-  && add-apt-repository ppa:cartodb/nodejs \
+  #&& add-apt-repository ppa:cartodb/nodejs \
   && add-apt-repository ppa:cartodb/postgresql-10 \
-  && add-apt-repository ppa:brightbox/ruby-ng \
+  #&& add-apt-repository ppa:brightbox/ruby-ng \
   # Install apt packages.
   && apt-get update && apt-get -y --no-install-recommends install \
     # build essentials
@@ -20,6 +20,9 @@ RUN apt-get update \
     bison \
     build-essential \
     flex \
+    wget \
+    gcc \
+    g++ \
     # some utils
     less vim.tiny \
     # Git
@@ -51,47 +54,71 @@ RUN apt-get update \
     libgdal1-dev \
     # Postgis
     libxml2-dev \
-    postgis \
-    # NodeJS and dependencies
-    libcairo2-dev \
-    libgif-dev \
-    libjpeg-dev \
-    libpango1.0-dev \
-    libpixman-1-0 \
-    libpixman-1-dev \
-    nodejs \
-    # Ruby
-    ruby2.2 \
-    ruby2.2-dev \
-    ruby-bundler \
-    libreadline6-dev \
-    openssl \
-    # Python dependencies
-    imagemagick \
+    postgis
+
+# Ruby
+#RUN apt-get install -y ruby2.5 \
+#    ruby2.5-dev \
+#    ruby-bundler
+RUN wget -O ruby-install.tar.gz https://github.com/postmodern/ruby-install/archive/v0.9.3.tar.gz \
+  && tar -xzvf ruby-install.tar.gz \
+  && cd ruby-install-0.9.3/ \
+  && make install \
+  && ruby-install ruby 3.0.7 \
+  # Clean up.
+  && cd .. \
+  && rm ruby-install.tar.gz \
+  && rm -rf ruby-install-0.9.3
+
+# Other dependencies (python, wget, etc)
+RUN apt-get install -y imagemagick \
     python-all-dev \
     libicu-dev \
+    libreadline6-dev \
+    openssl \
     unp \
     zip \
     # for user migration rake tasks
     redis-tools \
     # Other dependencies
-    unzip \
-    wget \
-  # Install Pip.
-  && wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py \
+    unzip
+
+# Install Pip.
+RUN wget -O /tmp/get-pip.py https://bootstrap.pypa.io/pip/2.7/get-pip.py \
   && python /tmp/get-pip.py \
   # Clean up.
   && rm /tmp/get-pip.py \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Ruby utilities.
+ENV CC=/usr/bin/gcc-5
+ENV CXX=/usr/bin/g++-5
+ENV PATH=/opt/rubies/ruby-3.0.7/bin:$PATH
+RUN gem install bundler:1.17.3
 RUN gem install compass
 
-# CartoDB/cartodb version
-ENV CARTODB_VERSION=4.21.0
+# Install NodeJS dependencies
+RUN apt-get update && apt-get install -y \
+    #libcairo2-dev \
+    libgif-dev \
+    libjpeg-dev \
+    #libpango1.0-dev \
+    libpixman-1-0 \
+    #libpixman-1-dev \
+    curl
+    #nodejs
+
+# Install NodeJS
+# todo: or downgrade cartodb editor maybe?
+RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt install -y nodejs
+RUN npm install npm@6.14.18 -g
+
+# GitHub changes for editor to install properly
+RUN git config --global url."https://".insteadOf git://
 
 # Download the Editor program, using the specified release tag.
-RUN git clone --recursive --branch v${CARTODB_VERSION} --depth 1 https://github.com/CartoDB/cartodb.git
+RUN git clone --recursive --depth 1 https://github.com/Fixxy/cartodb.git
 
 WORKDIR /cartodb
 
@@ -99,20 +126,20 @@ WORKDIR /cartodb
 ARG RAILS_ENV=development
 ENV RAILS_ENV=$RAILS_ENV
 
-
 # Install Ruby dependencies.
 RUN bundle install \
   # Install Python dependencies.
   && CPLUS_INCLUDE_PATH=/usr/include/gdal \
     C_INCLUDE_PATH=/usr/include/gdal \
     PATH=$PATH:/usr/include/gdal \
-    pip install -r python_requirements.txt \
-  # Install Node dependencies
-  && npm install \
-  # Add dependencies of configuration merge script.
-  && npm install \
-    js-yaml \
-    yargs
+    pip install -r python_requirements.txt
+
+# Install Node dependencies
+RUN npm install
+
+# Add dependencies of configuration merge script.
+RUN npm install js-yaml yargs
+RUN npm install grunt --save-dev
 
 COPY config/* /cartodb/config/
 

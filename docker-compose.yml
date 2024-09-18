@@ -40,7 +40,6 @@ services:
       - PUBLIC_PORT
       - ENVIRONMENT
   cartodb-editor:
-    image: sabman/ihmeuw-cartodb-docker_cartodb-editor
     depends_on:
       - cartodb-postgis
       - cartodb-redis
