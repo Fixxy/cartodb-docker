@@ -1,8 +1,8 @@
 # based on https://github.com/trajano/nginx-letsencrypt
-FROM nginx:1.15.5-alpine
+FROM nginx:1.27.1-alpine
 EXPOSE 443
 VOLUME /etc/letsencrypt
-RUN apk add py-urllib3 openssl certbot curl bash --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.7/community/ --repository http://dl-3.alpinelinux.org/alpine/v3.7/main/ \
+RUN apk add py-urllib3 openssl certbot curl bash --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.20/community/ --repository http://dl-3.alpinelinux.org/alpine/v3.20/main/ \
   && rm -rf /var/cache/apk/*
 COPY certbot-renew.sh /
 COPY nginx-files/* /etc/nginx/

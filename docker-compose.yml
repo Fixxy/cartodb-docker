@@ -69,7 +69,7 @@ services:
       context: router
     volumes:
       - public:/public:ro
-      #- letsencrypt:/etc/letsencrypt
+      - letsencrypt:/etc/letsencrypt
     ports:
       - 80:80
       - 443:443
