@@ -9,9 +9,7 @@ RUN apt-get update \
     software-properties-common python-software-properties \
   # Add PPAs.
   && add-apt-repository ppa:cartodb/gis \
-  #&& add-apt-repository ppa:cartodb/nodejs \
   && add-apt-repository ppa:cartodb/postgresql-10 \
-  #&& add-apt-repository ppa:brightbox/ruby-ng \
   # Install apt packages.
   && apt-get update && apt-get -y --no-install-recommends install \
     # build essentials
@@ -81,7 +79,9 @@ RUN apt-get install -y imagemagick \
     # for user migration rake tasks
     redis-tools \
     # Other dependencies
-    unzip
+    unzip \
+    wget \
+    curl
 
 # Install Pip.
 RUN wget -O /tmp/get-pip.py https://bootstrap.pypa.io/pip/2.7/get-pip.py \
@@ -99,17 +99,11 @@ RUN gem install compass
 
 # Install NodeJS dependencies
 RUN apt-get update && apt-get install -y \
-    #libcairo2-dev \
     libgif-dev \
     libjpeg-dev \
-    #libpango1.0-dev \
     libpixman-1-0 \
-    #libpixman-1-dev \
-    curl
-    #nodejs
 
 # Install NodeJS
-# todo: or downgrade cartodb editor maybe?
 RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt install -y nodejs
 RUN npm install npm@6.14.18 -g
