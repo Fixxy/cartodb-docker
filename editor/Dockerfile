@@ -112,7 +112,7 @@ RUN npm install npm@6.14.18 -g
 RUN git config --global url."https://".insteadOf git://
 
 # Download the Editor program, using the specified release tag.
-RUN git clone --recursive --depth 1 https://github.com/Fixxy/cartodb.git
+RUN git clone --recursive --depth 1 https://github.com/Global-Mapping-Hub/cartodb.git
 
 WORKDIR /cartodb
 
