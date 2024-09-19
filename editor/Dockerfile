@@ -62,7 +62,7 @@ RUN wget -O ruby-install.tar.gz https://github.com/postmodern/ruby-install/archi
   && tar -xzvf ruby-install.tar.gz \
   && cd ruby-install-0.9.3/ \
   && make install \
-  && ruby-install ruby 3.0.7 \
+  && ruby-install ruby 2.7.5 \
   # Clean up.
   && cd .. \
   && rm ruby-install.tar.gz \
@@ -93,8 +93,10 @@ RUN wget -O /tmp/get-pip.py https://bootstrap.pypa.io/pip/2.7/get-pip.py \
 # Install Ruby utilities.
 ENV CC=/usr/bin/gcc-5
 ENV CXX=/usr/bin/g++-5
-ENV PATH=/opt/rubies/ruby-3.0.7/bin:$PATH
+ENV PATH=/opt/rubies/ruby-2.7.5/bin:$PATH
 RUN gem install bundler:1.17.3
+RUN gem install ffi -v 1.16.3
+RUN gem install bigdecimal -v 1.3.0
 RUN gem install compass
 
 # Install NodeJS dependencies
