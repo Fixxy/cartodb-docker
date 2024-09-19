@@ -60,7 +60,7 @@ services:
       - PUBLIC_PORT
       - PUBLIC_PROTOCOL
       - DEFAULT_USER
-      - DEFAULT_PASSWORD
+      - PASSWORD
   cartodb-router:
     depends_on:
       - cartodb-mapsapi
