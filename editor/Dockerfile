@@ -105,8 +105,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install NodeJS
 RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
-RUN apt-get update && apt-get install -y nodejs npm
-RUN nodejs -v && npm -v && asdasd
+RUN apt-get update && apt-get install -y nodejs
 RUN npm install npm@6.14.18 -g
 
 # GitHub changes for editor to install properly
