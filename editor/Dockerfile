@@ -101,11 +101,12 @@ RUN gem install compass
 RUN apt-get update && apt-get install -y \
     libgif-dev \
     libjpeg-dev \
-    libpixman-1-0 \
+    libpixman-1-0
 
 # Install NodeJS
 RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
-RUN apt install -y nodejs
+RUN apt-get update && apt-get install -y nodejs npm
+RUN nodejs -v && npm -v && asdasd
 RUN npm install npm@6.14.18 -g
 
 # GitHub changes for editor to install properly
