@@ -132,7 +132,7 @@ RUN bundle install \
 RUN npm install
 
 # Add dependencies of configuration merge script.
-RUN npm install js-yaml yargs
+RUN npm install js-yaml@3.14.1 yargs
 RUN npm install grunt --save-dev
 
 COPY config/* /cartodb/config/
