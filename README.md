@@ -4,6 +4,8 @@ Based on [ihmeuw/cartodb-docker](https://github.com/ihmeuw/cartodb-docker)
 
 This repository provides a Docker Compose setup for running a complete [CartoDB](https://github.com/CartoDB/cartodb) environment using Docker. It includes subdirectories for each Carto service, along with a reverse proxy configuration to route all requests through a single endpoint with SSL support.
 
+Builds successfully on Ubuntu 24.04.1 LTS
+
 ## Carto Services
 
 1. **`editor`**: Runs the [Carto web application](https://github.com/CartoDB/cartodb).
