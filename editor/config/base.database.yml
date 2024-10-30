@@ -1,0 +1,19 @@
+production:
+  host: cartodb-postgis
+  password: ${POSTGRES_PASSWORD}
+  template: template0
+
+staging:
+  host: cartodb-postgis
+  password: ${POSTGRES_PASSWORD}
+  template: template0
+
+development:
+  host: cartodb-postgis
+  password: ${POSTGRES_PASSWORD}
+  template: template0
+
+test:
+  host: cartodb-postgis
+  password: ${POSTGRES_PASSWORD}
+  template: template0

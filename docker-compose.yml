@@ -1,0 +1,126 @@
+volumes:
+  postgresdb:
+  redisdb:
+  public:
+  letsencrypt:
+
+services:
+
+  cartodb-postgis:
+    container_name: cartodb-postgis
+    restart: always
+    build:
+      context: postgis
+    volumes:
+      - postgresdb:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - internalnet
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - PGDATA
+
+  cartodb-redis:
+    container_name: cartodb-redis
+    restart: always
+    build:
+      context: redis
+    volumes:
+      - redisdb:/data
+    ports:
+      - 6379:6379
+    networks:
+      - internalnet
+
+  cartodb-sqlapi:
+    depends_on:
+      - cartodb-postgis
+      - cartodb-redis
+    container_name: cartodb-sqlapi
+    restart: always
+    build:
+      context: sqlapi
+    command: $ENVIRONMENT.js.example
+    ports:
+      - 8080:80
+    networks:
+      - internalnet
+    environment:
+      - ENVIRONMENT
+
+  cartodb-mapsapi:
+    depends_on:
+      - cartodb-postgis
+      - cartodb-redis
+    container_name: cartodb-mapsapi
+    restart: always
+    build:
+      context: mapsapi
+    command: $ENVIRONMENT.js.example
+    ports:
+      - 8181:80
+    networks:
+      - internalnet
+    environment:
+      - PUBLIC_HOST
+      - PUBLIC_PORT
+      - ENVIRONMENT
+
+  cartodb-editor:
+    depends_on:
+      - cartodb-postgis
+      - cartodb-redis
+      - cartodb-mapsapi
+      - cartodb-sqlapi
+    container_name: cartodb-editor
+    restart: always
+    build:
+      context: editor
+      args:
+        - RAILS_ENV=$ENVIRONMENT
+    volumes:
+      - public:/cartodb/public
+      - ./migrated:/migrated
+    ports:
+      - 3000:3000
+    networks:
+      - internalnet
+    environment:
+      - PUBLIC_HOST
+      - PUBLIC_PORT
+      - PUBLIC_PROTOCOL
+      - DEFAULT_USER
+      - PASSWORD
+      - EMAIL
+      - POSTGRES_PASSWORD
+      - REDIS_SERVER=cartodb-redis
+      - GDRIVE_OAUTH_CLIENT_ID
+      - GDRIVE_OAUTH_CLIENT_SECRET
+      - ORGANIZATION_NAME
+
+  cartodb-router:
+    depends_on:
+      - cartodb-mapsapi
+      - cartodb-sqlapi
+      - cartodb-editor
+    container_name: cartodb-router
+    restart: always
+    build:
+      context: router
+    volumes:
+      - public:/public:ro
+      - letsencrypt:/etc/letsencrypt
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - internalnet
+    environment:
+      - EMAIL
+      - DOMAIN
+    tty: true
+
+networks:
+    internalnet:
