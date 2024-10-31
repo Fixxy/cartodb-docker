@@ -125,7 +125,7 @@ ARG RAILS_ENV=production
 ENV RAILS_ENV=$RAILS_ENV
 
 # Number of seconds between dataset synchronizations (default interval is an hour)
-ENV SYNC_TABLES_INTERVAL 3600
+ENV SYNC_TABLES_INTERVAL=3600
 
 # Install Ruby dependencies.
 RUN bundle install \
