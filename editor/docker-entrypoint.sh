@@ -35,8 +35,10 @@ echo "Restoring user metadata"
 bundle exec ./script/restore_redis
 
 echo "Starting resque process"
-#bundle exec ./script/resque &
 bundle exec ./script/resque > resque.log 2>&1 &
+
+echo "Starting table sync script"
+./script/sync_tables.sh &
 
 echo "Initializing the metadata database..."
 echo "Running db:create..."

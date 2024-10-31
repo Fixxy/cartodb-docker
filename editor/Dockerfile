@@ -120,9 +120,12 @@ RUN git clone --recursive --depth 1 https://github.com/Global-Mapping-Hub/cartod
 
 WORKDIR /cartodb
 
-# Environment type.
+# Rails environment
 ARG RAILS_ENV=production
 ENV RAILS_ENV=$RAILS_ENV
+
+# Number of seconds between dataset synchronizations (default interval is an hour)
+ENV SYNC_TABLES_INTERVAL 3600
 
 # Install Ruby dependencies.
 RUN bundle install \
@@ -142,7 +145,7 @@ RUN npm install
 RUN npm install js-yaml@3.14.1 yargs
 RUN npm install grunt --save-dev
 
-# Copy files
+# Copy config files
 COPY config/* /cartodb/config/
 
 # Compile static assets
@@ -159,9 +162,10 @@ RUN PATH=$PATH:/cartodb/node_modules/grunt-cli/bin \
 # External port
 EXPOSE 3000
 
-# Copy resources
+# Copy other scripts and resources
 COPY util/* /cartodb/docker-entrypoint-util/
 COPY docker-entrypoint.sh /cartodb/
+COPY sync_tables.sh /cartodb/script/sync_tables.sh
 
 # Set scripts permissions
 RUN chmod +x /cartodb/script/*
