@@ -64,7 +64,7 @@ defaults: &defaults
       application_name:     'CartoDB GDrive OAuth'
       client_id:            ${GDRIVE_OAUTH_CLIENT_ID}
       client_secret:        ${GDRIVE_OAUTH_CLIENT_SECRET}
-      callback_url:         ${PUBLIC_HOST}
+      callback_url:         "${PUBLIC_PROTOCOL}://${PUBLIC_HOST}"
 
 development:
   <<: *defaults
