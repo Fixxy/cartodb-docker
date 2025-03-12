@@ -31,6 +31,8 @@ defaults: &defaults
     host: cartodb-redis
   org_metadata_api:
     host: ${PUBLIC_HOST}
+  importer:
+    python_bin_path: '/usr/bin/python2'
   app_assets:
     asset_host: "${PUBLIC_PROTOCOL}://${PUBLIC_HOST}"
   layer_opts:
