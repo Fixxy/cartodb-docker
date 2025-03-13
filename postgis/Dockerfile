@@ -151,6 +151,10 @@ COPY initdb-postgis.sh /docker-entrypoint-initdb.d/01-postgis.sh
 RUN chmod +rx /docker-entrypoint-initdb.d/01-postgis.sh
 RUN chmod 777 /usr/local/bin/docker-entrypoint.sh
 
+# Adjust postgres config
+RUN sed -E -i 's/^(max_connections\s*=\s*)[0-9]+/\1 300/' /var/lib/postgresql/data/postgresql.conf
+RUN sed -E -i 's/^(shared_buffers\s*=\s*)[0-9]+MB/\1 512MB/' /var/lib/postgresql/data/postgresql.conf
+
 # Expose Postgres port
 EXPOSE 5432
 
