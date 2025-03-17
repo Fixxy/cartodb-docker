@@ -122,5 +122,20 @@ services:
       - DOMAIN
     tty: true
 
+  cartodb-varnish:
+    depends_on:
+      - cartodb-editor
+      - cartodb-mapsapi
+      - cartodb-sqlapi
+    container_name: cartodb-varnish
+    restart: always
+    build:
+      context: varnish
+    ports:
+      - 6081:6081
+      - 6082:6082
+    networks:
+      - internalnet
+
 networks:
     internalnet:

@@ -15,6 +15,15 @@ module.exports = {
   redis: {
     host: 'cartodb-redis',
   },
+  varnish: {
+    host: 'cartodb-varnish',
+    port: 6082,
+    http_port: 6081,
+    purge_enabled: false,
+    secret: 'nsrzTg7oVz3sK7w3PACQ6YnshPCeeai4Qjd9biqa',
+    ttl: 86400,
+    layergroupTtl: 86400 // the max-age for cache-control header in layergroup responses
+  },
   resources_url_templates: {
     http: 'http://' + PUBLIC_URL + '/user/{{=it.user}}/api/v1/map',
     https: 'https://' + PUBLIC_URL + '/user/{{=it.user}}/api/v1/map'

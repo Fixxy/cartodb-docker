@@ -27,6 +27,16 @@ defaults: &defaults
       <<: *routing_defaults
     public:
       <<: *routing_defaults
+  varnish_management:
+    critical: false
+    host: cartodb-varnish
+    port: 6082
+    http_port: 6081
+    purge_command: 'purge'
+    retries: 5
+    timeout: 5
+    # 'warning' or 'error'
+    trigger_verbose: true
   redis:
     host: cartodb-redis
   org_metadata_api:

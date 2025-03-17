@@ -30,7 +30,10 @@ server {
       proxy_set_header X-Real-IP         $remote_addr;
       proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
       proxy_set_header X-Forwarded-Proto $scheme;
-      proxy_pass       http://cartodb-mapsapi:8181;
+      proxy_set_header        X-Carto-Service mapsapi; # tell varnish what backend
+      proxy_no_cache          true;           # Make sure nginx doesn't cache
+      proxy_cache_bypass      true;           # Make sure nginx doesn't cache
+      proxy_pass              http://cartodb-varnish:6081;  # hand off to Varnish
     }
 
     location ~* api/v2/sql {
@@ -38,7 +41,10 @@ server {
       proxy_set_header X-Real-IP         $remote_addr;
       proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
       proxy_set_header X-Forwarded-Proto $scheme;
-      proxy_pass       http://cartodb-sqlapi:8080;
+      proxy_set_header        X-Carto-Service sqlapi; # tell varnish what back end
+      proxy_no_cache          true;           # make sure nginx doesn't cache
+      proxy_cache_bypass      true;           # make sure nginx doesn't cache
+      proxy_pass              http://cartodb-varnish:6081;  # hand off to Varnish
     }
 
     location / {
