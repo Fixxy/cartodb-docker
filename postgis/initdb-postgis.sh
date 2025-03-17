@@ -10,6 +10,15 @@ createuser publicuser --no-createrole --no-createdb --no-superuser -U $PGUSER
 echo "Creating user 'tileuser'..."
 createuser tileuser --no-createrole --no-createdb --no-superuser -U $PGUSER
 
+# Adjust postgres config
+echo "Adjusting postgres config..."
+sed -E -i 's/^(max_connections\s*=\s*)[0-9]+/\1 300/' /var/lib/postgresql/data/postgresql.conf
+sed -E -i 's/^(shared_buffers\s*=\s*)[0-9]+MB/\1 512MB/' /var/lib/postgresql/data/postgresql.conf
+
+# Restart nginx
+echo "Restarting nginx..."
+service postgresql-10 restart
+
 # Initialize template_postgis database. We create a template database in postgresql that will
 # contain the postgis extension. This way, every time CartoDB creates a new user database it just
 # clones this template database
