@@ -3,6 +3,8 @@ vcl 4.1;
 acl purge {
     "localhost";
     "127.0.0.1";
+    "cartodb-varnish";
+    "172.0.0.0/8";
 }
 
 backend sqlapi {
