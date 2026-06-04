@@ -1,5 +1,5 @@
 # based on https://github.com/trajano/nginx-letsencrypt
-FROM nginx:1.27.2-bookworm
+FROM nginx:1.29.8-trixie
 EXPOSE 443
 VOLUME /etc/letsencrypt
 
